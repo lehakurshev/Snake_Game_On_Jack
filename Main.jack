@@ -1,9 +1,13 @@
 class Main {
     function void main() {
+        var char exitKey;
         var SnakeGame game;
-        let game = SnakeGame.new(256,128,32,64);
-        do game.start();
-        do game.dispose();
-        return;
+        let exitKey = Keyboard.keyPressed();
+        while (~(exitKey = 140)){
+            let game = SnakeGame.new(256,128);
+            do game.start();
+            do game.dispose();
+            return;
+        }
     }
 }

@@ -6,16 +6,15 @@ class SnakeGame
    field int direction;
    field bool gameOver;
    field int size;
-   field int randomsOffset;
+   static int randomsOffset;
    
-   constructor SnakeGame new(int headX, int headY, int appleX, int appleY) {
-        let head = Point.new(headX,headY);
+   constructor SnakeGame new(int headX, int headY) {
+        let head = Point.new(headX, headY);
         let direction = 0;  //(ну типа 0 - влево,1 - вверх,2 - вправо,3 - вниз)
-        let apple = Point.new(appleX, appleY);
+        let apple = randomPoint();
         let tail = Queue.new(headX, headY);
         let gameOver = false;
         let size = 15;
-        let randomsOffset = 0;
         
         return this;
    }
@@ -71,17 +70,23 @@ class SnakeGame
         var int x, y; 
         var Point point;
         let x = randomsOffset * 37 + 131; 
-        while ((x - 32) > 0) 
+        while (((x - 32) > 1) ) 
         { 
             let x = x - 32; 
         } 
- 
+        if (x > 30)
+        {
+            let x = 3;
+        }
         let y = randomsOffset * 29 + 127; 
-        while ((y - 16) > 0) 
+        while (((y - 16) > 1) ) 
         { 
             let y = y - 16; 
         } 
- 
+        if (y > 14)
+        {
+            let y = 1;
+        }
         if ((randomsOffset - 1) = 8) 
         { 
 
@@ -133,10 +138,19 @@ class SnakeGame
         var char key;
         let key = Keyboard.keyPressed();
         
-        if (key = 130) {let direction = 0;}
-        if (key = 131) {let direction = 1;}
-        if (key = 132) {let direction = 2;}
-        if (key = 133) {let direction = 3;}
+        if (key = 130){
+            if (~(direction = 2)){let direction = 0;}
+        }
+        if (key = 131) {
+            if (~(direction = 3)){let direction = 1;}
+        }
+        if (key = 132) {
+            if (~(direction = 0)){let direction = 2;}
+        }
+        if (key = 133) {
+            if (~(direction = 1)){let direction = 3;}
+        }
+
         return;
     }
 

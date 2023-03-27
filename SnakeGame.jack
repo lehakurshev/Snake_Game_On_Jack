@@ -6,7 +6,8 @@ class SnakeGame
    field int direction;
    field bool gameOver;
    field int size;
-   static int randomsOffset;
+   static int randomsOffsetX;
+   static int randomsOffsetY;
    
    constructor SnakeGame new(int headX, int headY) {
         let head = Point.new(headX, headY);
@@ -69,39 +70,50 @@ class SnakeGame
     { 
         var int x, y; 
         var Point point;
-        let x = randomsOffset * 37 + 131; 
+
+        let x = randomsOffsetX * 37 + 131; 
         while (((x - 32) > 1) ) 
         { 
             let x = x - 32; 
         } 
         if (x > 30)
         {
-            let x = 3;
+            let x = x - 16;
         }
-        let y = randomsOffset * 29 + 127; 
+
+        let y = randomsOffsetY * 29 + 127; 
         while (((y - 16) > 1) ) 
         { 
             let y = y - 16; 
         } 
         if (y > 14)
         {
-            let y = 1;
+            let y = y - 8;
         }
-        if ((randomsOffset - 1) = 8) 
+
+        if ((randomsOffsetX + 2) > 7) 
         { 
 
-            let randomsOffset = 0; 
+            let randomsOffsetX = randomsOffsetX + 2 - 7; 
         } 
         else 
         { 
-            let randomsOffset = randomsOffset + 1; 
+            let randomsOffsetX = randomsOffsetX + 2; 
         } 
         
-        let x = Math.multiply(x,16);
-        let y = Math.multiply(y,16);
+        if ((randomsOffsetY + 5) > 7) 
+        { 
+
+            let randomsOffsetY = randomsOffsetY + 5 - 7; 
+        } 
+        else 
+        { 
+            let randomsOffsetY = randomsOffsetY + 5; 
+        } 
+        
         let point = Point.new(x, y); 
  
-        if ((~(tail.containTail(apple))) & (~((head.GetX() = point.GetX()) & (head.GetY() = point.GetY())))) 
+        if ((~(tail.containTail(point))) & (~((head.GetX() = point.GetX()) & (head.GetY() = point.GetY())))) 
         {
             return point; 
         } 

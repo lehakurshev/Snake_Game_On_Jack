@@ -1,0 +1,203 @@
+function Queue.new 0
+push constant 2
+call Memory.alloc 1
+pop pointer 0
+push constant 1
+call Array.new 1
+pop this 0
+push constant 0
+push this 0
+add
+push argument 0
+push argument 1
+push constant 16
+add
+call Point.new 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 1
+pop this 1
+push pointer 0
+return
+function Queue.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Queue.Length 0
+push argument 0
+pop pointer 0
+push this 1
+return
+function Queue.addToStart 2
+push argument 0
+pop pointer 0
+push this 1
+push constant 1
+add
+call Array.new 1
+pop local 1
+push constant 0
+push local 1
+add
+push argument 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+lt
+not
+if-goto WHILE_END0
+push local 0
+push constant 1
+add
+push local 1
+add
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 0
+call Array.dispose 1
+pop temp 0
+push local 1
+pop this 0
+push this 1
+push constant 1
+add
+pop this 1
+push constant 0
+return
+function Queue.removeFromEnd 3
+push argument 0
+pop pointer 0
+push this 1
+push constant 1
+sub
+call Array.new 1
+pop local 1
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+push constant 1
+sub
+lt
+not
+if-goto WHILE_END0
+push local 0
+push local 1
+add
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 1
+push constant 1
+sub
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 2
+push this 0
+call Array.dispose 1
+pop temp 0
+push local 1
+pop this 0
+push this 1
+push constant 1
+sub
+pop this 1
+push local 2
+return
+function Queue.containTail 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push this 1
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push argument 1
+call Point.GetX 1
+push local 1
+call Point.GetX 1
+eq
+push argument 1
+call Point.GetY 1
+push local 1
+call Point.GetY 1
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+label IF_FALSE0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 0
+return
+function Queue.GiveFirstElement 1
+push argument 0
+pop pointer 0
+push constant 0
+push this 0
+add
+pop pointer 1
+push that 0
+pop local 0
+push local 0
+return

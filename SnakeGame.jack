@@ -1,0 +1,234 @@
+class SnakeGame
+{
+   field Point head;
+   field Queue tail; //(массив точек,где хранятся тожки,принадлежащие змее)
+   field Point apple;
+   field int direction;
+   field bool gameOver;
+   field int size;
+   field int randomsOffset;
+   
+   constructor SnakeGame new(int headX, int headY, int appleX, int appleY) {
+        let head = Point.new(headX,headY);
+        let direction = 0;  //(ну типа 0 - влево,1 - вверх,2 - вправо,3 - вниз)
+        let apple = Point.new(appleX, appleY);
+        let tail = Queue.new(headX, headY);
+        let gameOver = false;
+        let size = 15;
+        let randomsOffset = 0;
+        
+        return this;
+   }
+
+   method void dispose() {
+        do tail.dispose();
+        do head.dispose();
+        do apple.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void draw(Point point) {
+        var int x;
+        var int y;
+        let x = point.GetX();
+        let y = point.GetY();
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x + size, y + size);
+        return;
+    }
+
+    method void drawH(int x,int y) {
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x + size, y + size);
+        return;
+    }
+
+    method void erase(Point point) {
+        var int x;
+        var int y;
+        let x = point.GetX();
+        let y = point.GetY();
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x, y, x + size, y + size);
+        return;
+    }
+
+    method void drawAplle(Point point) {
+        var int x;
+        var int y;
+        let x = point.GetX();
+        let y = point.GetY();
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x, y, x+size, y+size);
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x+2, y+2, x+size-2, y+size-2);
+        return;
+    }
+
+    method Point randomPoint()  
+    { 
+        var int x, y; 
+        var Point point;
+        let x = randomsOffset * 37 + 131; 
+        while ((x - 32) > 0) 
+        { 
+            let x = x - 32; 
+        } 
+ 
+        let y = randomsOffset * 29 + 127; 
+        while ((y - 16) > 0) 
+        { 
+            let y = y - 16; 
+        } 
+ 
+        if ((randomsOffset - 1) = 8) 
+        { 
+
+            let randomsOffset = 0; 
+        } 
+        else 
+        { 
+            let randomsOffset = randomsOffset + 1; 
+        } 
+        
+        let x = Math.multiply(x,16);
+        let y = Math.multiply(y,16);
+        let point = Point.new(x, y); 
+ 
+        if ((~(tail.containTail(apple))) & (~((head.GetX() = point.GetX()) & (head.GetY() = point.GetY())))) 
+        {
+            return point; 
+        } 
+        else 
+        { 
+            return randomPoint(); 
+        } 
+    }
+
+   method void start() {
+        var Point elemTail;
+        let elemTail = tail.GiveFirstElement();
+
+        do draw(head);
+
+        do draw(elemTail);
+        do drawAplle(apple);
+        while (~gameOver)
+        {
+            do input();  // призваиваем значение направлению с клавиатуры
+            do logicAndDraw();   // основная логика
+            do Sys.wait(100);
+        }
+        while (~(Keyboard.keyPressed() = 32))
+        {
+            do Sys.wait(100);
+        }
+       return;
+    }
+
+
+   method void input()
+    {
+        var char key;
+        let key = Keyboard.keyPressed();
+        
+        if (key = 130) {let direction = 0;}
+        if (key = 131) {let direction = 1;}
+        if (key = 132) {let direction = 2;}
+        if (key = 133) {let direction = 3;}
+        return;
+    }
+
+    method void logicAndDraw()
+    {
+        var Point retPoint;  
+        do move(direction);
+
+        if (~((head.GetX() = apple.GetX()) & (head.GetY() = apple.GetY())))  // если голова змейки не оказалась в клетке,где яблоко
+        {      
+            let retPoint = tail.removeFromEnd();                                                      //то удаляем задний пиксель змейки
+            do erase(retPoint);
+            do retPoint.dispose();
+        }
+        else
+        {
+            do apple.dispose();
+            let apple = randomPoint();
+            do drawAplle(apple);
+        }
+
+          
+        if (tail.containTail(head))
+        {
+            let gameOver = true;
+        }
+
+        do draw(head);
+       
+        return;
+    }
+
+
+
+   method void move(int direction)
+   {
+        var int headX;
+        var int headY;
+        var Point oldHead;
+        let headX = head.GetX();
+        let headY = head.GetY();
+        let oldHead = Point.new(headX, headY);
+        do tail.addToStart(oldHead);
+        do head.dispose();
+
+        if (direction = 0) // если направление влево 
+        {
+            if (headX < 16)
+            {
+                let head = Point.new(496, headY);  //512 - 16 = 496
+            }
+            else
+            {
+                let head = Point.new(headX - 16, headY);  
+            }
+        }
+
+       if (direction = 1) // если направление вверх
+       {
+           if (headY < 16)
+           {
+               let head = Point.new(headX, 240);  // 256  - 16 = 240
+           }
+           else
+           {
+               let head = Point.new(headX, headY - 16);  
+           }
+       }
+
+       if (direction = 2) // если направление вправо
+       {
+           if ( (headX + size) > 497)
+           {
+               let head = Point.new(0, headY);  //начало экрана
+           }
+           else
+           {
+               let head = Point.new(headX + 16, headY);  
+           }
+       }
+
+       if (direction = 3) // если направление вниз
+       {
+           if ( (headY + size) > 241)
+           {
+               let head = Point.new(headY, 0);  // начало экрана
+           }
+           else
+           {
+               let head = Point.new(headX, headY + 16);  
+           }
+       }
+       return;
+   }
+}

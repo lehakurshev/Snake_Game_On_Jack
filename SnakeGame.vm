@@ -1,0 +1,539 @@
+function SnakeGame.new 0
+push constant 7
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+push argument 1
+call Point.new 2
+pop this 0
+push constant 0
+pop this 3
+push argument 2
+push argument 3
+call Point.new 2
+pop this 2
+push argument 0
+push argument 1
+call Queue.new 2
+pop this 1
+push constant 0
+pop this 4
+push constant 15
+pop this 5
+push constant 0
+pop this 6
+push pointer 0
+return
+function SnakeGame.dispose 0
+push argument 0
+pop pointer 0
+push this 1
+call Queue.dispose 1
+pop temp 0
+push this 0
+call Point.dispose 1
+pop temp 0
+push this 2
+call Point.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function SnakeGame.draw 2
+push argument 0
+pop pointer 0
+push argument 1
+call Point.GetX 1
+pop local 0
+push argument 1
+call Point.GetY 1
+pop local 1
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push local 0
+push this 5
+add
+push local 1
+push this 5
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function SnakeGame.drawH 0
+push argument 0
+pop pointer 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push argument 1
+push argument 2
+push argument 1
+push this 5
+add
+push argument 2
+push this 5
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function SnakeGame.erase 2
+push argument 0
+pop pointer 0
+push argument 1
+call Point.GetX 1
+pop local 0
+push argument 1
+call Point.GetY 1
+pop local 1
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push local 0
+push this 5
+add
+push local 1
+push this 5
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function SnakeGame.drawAplle 2
+push argument 0
+pop pointer 0
+push argument 1
+call Point.GetX 1
+pop local 0
+push argument 1
+call Point.GetY 1
+pop local 1
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push local 0
+push this 5
+add
+push local 1
+push this 5
+add
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push constant 2
+add
+push local 1
+push constant 2
+add
+push local 0
+push this 5
+add
+push constant 2
+sub
+push local 1
+push this 5
+add
+push constant 2
+sub
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function SnakeGame.randomPoint 3
+push argument 0
+pop pointer 0
+push this 6
+push constant 37
+call Math.multiply 2
+push constant 131
+add
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 32
+sub
+push constant 0
+gt
+not
+if-goto WHILE_END0
+push local 0
+push constant 32
+sub
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push this 6
+push constant 29
+call Math.multiply 2
+push constant 127
+add
+pop local 1
+label WHILE_EXP1
+push local 1
+push constant 16
+sub
+push constant 0
+gt
+not
+if-goto WHILE_END1
+push local 1
+push constant 16
+sub
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push this 6
+push constant 1
+sub
+push constant 8
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+pop this 6
+goto IF_END0
+label IF_FALSE0
+push this 6
+push constant 1
+add
+pop this 6
+label IF_END0
+push local 0
+push constant 16
+call Math.multiply 2
+pop local 0
+push local 1
+push constant 16
+call Math.multiply 2
+pop local 1
+push local 0
+push local 1
+call Point.new 2
+pop local 2
+push this 1
+push this 2
+call Queue.containTail 2
+not
+push this 0
+call Point.GetX 1
+push local 2
+call Point.GetX 1
+eq
+push this 0
+call Point.GetY 1
+push local 2
+call Point.GetY 1
+eq
+and
+not
+and
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push local 2
+return
+goto IF_END1
+label IF_FALSE1
+push pointer 0
+call SnakeGame.randomPoint 1
+return
+label IF_END1
+function SnakeGame.start 1
+push argument 0
+pop pointer 0
+push this 1
+call Queue.GiveFirstElement 1
+pop local 0
+push pointer 0
+push this 0
+call SnakeGame.draw 2
+pop temp 0
+push pointer 0
+push local 0
+call SnakeGame.draw 2
+pop temp 0
+push pointer 0
+push this 2
+call SnakeGame.drawAplle 2
+pop temp 0
+label WHILE_EXP0
+push this 4
+not
+not
+if-goto WHILE_END0
+push pointer 0
+call SnakeGame.input 1
+pop temp 0
+push pointer 0
+call SnakeGame.logicAndDraw 1
+pop temp 0
+push constant 100
+call Sys.wait 1
+pop temp 0
+goto WHILE_EXP0
+label WHILE_END0
+label WHILE_EXP1
+call Keyboard.keyPressed 0
+push constant 32
+eq
+not
+not
+if-goto WHILE_END1
+push constant 100
+call Sys.wait 1
+pop temp 0
+goto WHILE_EXP1
+label WHILE_END1
+push constant 0
+return
+function SnakeGame.input 1
+push argument 0
+pop pointer 0
+call Keyboard.keyPressed 0
+pop local 0
+push local 0
+push constant 130
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+pop this 3
+label IF_FALSE0
+push local 0
+push constant 131
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 1
+pop this 3
+label IF_FALSE1
+push local 0
+push constant 132
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push constant 2
+pop this 3
+label IF_FALSE2
+push local 0
+push constant 133
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push constant 3
+pop this 3
+label IF_FALSE3
+push constant 0
+return
+function SnakeGame.logicAndDraw 1
+push argument 0
+pop pointer 0
+push pointer 0
+push this 3
+call SnakeGame.move 2
+pop temp 0
+push this 0
+call Point.GetX 1
+push this 2
+call Point.GetX 1
+eq
+push this 0
+call Point.GetY 1
+push this 2
+call Point.GetY 1
+eq
+and
+not
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push this 1
+call Queue.removeFromEnd 1
+pop local 0
+push pointer 0
+push local 0
+call SnakeGame.erase 2
+pop temp 0
+push local 0
+call Point.dispose 1
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push this 2
+call Point.dispose 1
+pop temp 0
+push pointer 0
+call SnakeGame.randomPoint 1
+pop this 2
+push pointer 0
+push this 2
+call SnakeGame.drawAplle 2
+pop temp 0
+label IF_END0
+push this 1
+push this 0
+call Queue.containTail 2
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 0
+not
+pop this 4
+label IF_FALSE1
+push pointer 0
+push this 0
+call SnakeGame.draw 2
+pop temp 0
+push constant 0
+return
+function SnakeGame.move 3
+push argument 0
+pop pointer 0
+push this 0
+call Point.GetX 1
+pop local 0
+push this 0
+call Point.GetY 1
+pop local 1
+push local 0
+push local 1
+call Point.new 2
+pop local 2
+push this 1
+push local 2
+call Queue.addToStart 2
+pop temp 0
+push this 0
+call Point.dispose 1
+pop temp 0
+push argument 1
+push constant 0
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push local 0
+push constant 16
+lt
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push constant 496
+push local 1
+call Point.new 2
+pop this 0
+goto IF_END1
+label IF_FALSE1
+push local 0
+push constant 16
+sub
+push local 1
+call Point.new 2
+pop this 0
+label IF_END1
+label IF_FALSE0
+push argument 1
+push constant 1
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push local 1
+push constant 16
+lt
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push local 0
+push constant 240
+call Point.new 2
+pop this 0
+goto IF_END3
+label IF_FALSE3
+push local 0
+push local 1
+push constant 16
+sub
+call Point.new 2
+pop this 0
+label IF_END3
+label IF_FALSE2
+push argument 1
+push constant 2
+eq
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push local 0
+push this 5
+add
+push constant 497
+gt
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
+push constant 0
+push local 1
+call Point.new 2
+pop this 0
+goto IF_END5
+label IF_FALSE5
+push local 0
+push constant 16
+add
+push local 1
+call Point.new 2
+pop this 0
+label IF_END5
+label IF_FALSE4
+push argument 1
+push constant 3
+eq
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
+push local 1
+push this 5
+add
+push constant 241
+gt
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push local 1
+push constant 0
+call Point.new 2
+pop this 0
+goto IF_END7
+label IF_FALSE7
+push local 0
+push local 1
+push constant 16
+add
+call Point.new 2
+pop this 0
+label IF_END7
+label IF_FALSE6
+push constant 0
+return

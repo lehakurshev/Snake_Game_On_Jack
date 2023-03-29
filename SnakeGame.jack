@@ -66,23 +66,22 @@ class SnakeGame
         return;
     }
 
-    method Point randomPoint()  
+    method Point randomPoint(int X, int Y)  
     { 
         var int x, y; 
         var Point point;
-        let x = randomsOffset * 37 + 131; 
+        let x = Math.multiply(randomsOffset,37) + 131 + Math.multiply(X,7);
         while (((x - 32) > 0) | ((x - 32) = 0)) 
         { 
             let x = x - 32; 
         } 
- 
-        let y = randomsOffset * 29 + 127; 
+        let y = Math.multiply(randomsOffset,29) + 127 + Math.multiply(Y,5);
         while (((y - 16) > 0) | ((y - 16) = 0)) 
         { 
             let y = y - 16; 
         } 
  
-        if ((randomsOffset - 1) = 8) 
+        if ((randomsOffset - 1) = 31) 
         { 
 
             let randomsOffset = 0; 
@@ -94,15 +93,15 @@ class SnakeGame
         
         let x = Math.multiply(x,16);
         let y = Math.multiply(y,16);
-        let point = Point.new(x, y); 
- 
-        if ((~(tail.containTail(apple))) & (~((head.GetX() = point.GetX()) & (head.GetY() = point.GetY())))) 
+
+        if ((~(tail.containTail(apple))) & (~((head.GetX() = x) & (head.GetY() = y)))) 
         {
+            let point = Point.new(x, y); 
             return point; 
         } 
         else 
         { 
-            return randomPoint(); 
+            return randomPoint(x, y); 
         } 
     }
 
@@ -133,16 +132,26 @@ class SnakeGame
         var char key;
         let key = Keyboard.keyPressed();
         
-        if (key = 130) {let direction = 0;}
-        if (key = 131) {let direction = 1;}
-        if (key = 132) {let direction = 2;}
-        if (key = 133) {let direction = 3;}
+        if (key = 130){
+            if (~(direction = 2)){let direction = 0;}
+        }
+        if (key = 131) {
+            if (~(direction = 3)){let direction = 1;}
+        }
+        if (key = 132) {
+            if (~(direction = 0)){let direction = 2;}
+        }
+        if (key = 133) {
+            if (~(direction = 1)){let direction = 3;}
+        }
         return;
     }
 
     method void logicAndDraw()
     {
-        var Point retPoint;  
+        var Point retPoint;
+        var int xApple;
+        var int yApple;   
         do move(direction);
 
         if (~((head.GetX() = apple.GetX()) & (head.GetY() = apple.GetY())))  // если голова змейки не оказалась в клетке,где яблоко
@@ -153,8 +162,10 @@ class SnakeGame
         }
         else
         {
+            let xApple = apple.GetX();
+            let yApple = apple.GetY();
             do apple.dispose();
-            let apple = randomPoint();
+            let apple = randomPoint(xApple, yApple);
             do drawAplle(apple);
         }
 
